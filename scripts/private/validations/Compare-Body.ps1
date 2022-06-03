@@ -8,14 +8,13 @@
         [string]$re
     )
 
-    if ($validationData.newBody) {
-        $res = $validationData.newBody -match $re
-    }
-    else {
-        $res = $issueData.body -match $re
+    $body = if ($validationData.newBody) {
+        $validationData.newBody -join "`n"
+    } else {
+        $issueData.body -join "`n"
     }
 
-    if ($res) {
+    if ($body -match $re) {
         return $Matches
     }
 }
