@@ -1,0 +1,64 @@
+name: New Package Request
+description: Request a package to be created that does not currently exist in the Chocolatey Community Repository!
+title: RFP - 
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before you open a new RFP request for pakcage please make sure of the following:
+
+        - Please ensure the package does not already exist in the Chocolatey Community Repository - https://community.chocolatey.org/packages - by using a relevant search.
+        - Please ensure there is no existing open package requests.
+        - Please ensure the issue title starts with `RFP - ` - for example `RFP - adobe-reader`
+        - Please also ensure the issue title matches the identifier you expect the package should be named.
+        - Please ensure you have both the Software Project URL and the Software Download URL before continuing.
+        
+        **NOTE: Please keep in mind we have an etiquette regarding communication that we expect folks to observe when they are looking for support in the Chocolatey community - https://github.com/chocolatey/chocolatey-package-requests/blob/master/README.md#etiquette-regarding-communication
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: Checklist
+      description: By submitting this issue, you have verified the that the following checks has been done.
+      options:
+        - label: The package I am requesting does not already exist on https://community.chocolatey.org/packages
+          required: true
+        - label: There is no open issue for this package
+          required: true
+        - label: The issue title starts with `RFP - `
+          required: true
+        - label: The download URL is public and not locked behind a paywall / login
+          required: true
+        - label: The title of the issue matches the identifier I want package maintainers to use
+          required: false
+  - type: input
+    id: softareUrl
+    attributes:
+      label: Software project URL
+      description: The home page or landing page of the software that you want to be packaged.
+    validations:
+      required: true
+  - type: textarea
+    id: directDownload
+    attributes:
+      label:  Direct download URLs for the software / installer
+      description: |
+        The URL to any archives or installers that can be used when creating a package.
+        Put each URL on its own line, and only the URL nothing else.
+
+        **NOTE: These should not be a URL to the page you can download archives or installers, but rather the URL directrly to the `.zip`, `.exe`, `.msi`, etc. instead.**
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Software summary / short description
+      description: Please tell us a bit about the Software that you wish someone to create a package for. This should be a minimum of 2-3 lines, and a maximum of 6 lines.
+    validations:
+      required: true
+  - type: textarea
+    id: expectations
+    attributes:
+      label: Package Expectations
+      description: Here you can make suggestions on what you would expect the package to do outside of `installing` - eg. adding icons to the desktop
+    validations:
+      required: false
