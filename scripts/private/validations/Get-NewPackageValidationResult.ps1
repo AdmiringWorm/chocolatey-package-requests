@@ -36,7 +36,7 @@ function Get-NewPackageValidationResult() {
     }
 
     Write-Host ([StatusCheckMessages]::checkUserMarkedWithCorrectRFPTitle)
-    $re = "(?i)\[[\sx]*\]\s*((?:The )?Issue title starts(?: with)? 'RFP)"
+    $re = "(?i)\[[\sx]*\]\s*((?:The )?Issue title starts(?: with)? ``RFP)"
     if ((Compare-Body @compareData -re $re) -and ($issueData.title -match "^RFP" -or $validationData.newTitle -match "^RFP")) {
         Write-Host ([StatusMessages]::uncheckedRFPItemFound)
         Update-ValidationBody -issueData $issueData -validationData $validationData -replacement $re, "[x] `${1}"
@@ -47,8 +47,15 @@ function Get-NewPackageValidationResult() {
         Add-ValidationMessage -validationData $validationData -message ([ValidationMessages]::issueMissingRfpCheckboxError) -type ([MessageType]::Error)
     }
 
+    Write-Host ([StatusCheckMessages]::checkingUserSearchedForOpenIssues)
+    $re = "\[x\]\s*There is no open issue"
+    if (!(Compare-Body @compareData -re $re)) {
+        Update-StatusLabel -validationData $validationData -label ([StatusLabels]::incompleteRequest)
+        Add-ValidationMessage -validationData $validationData -message ([ValidationMessages]::githubSearchNotMarkedError -f $validationData.repository, ($validationData.packageName -replace ' ', '%20')) -type ([MessageType]::Error)
+    }
+
     Write-Host ([StatusCheckMessages]::checkingUserProvidedSoftwareProjectUrl)
-    $re = "(?smi)Software project URL\s*\:[\s\r\n]*(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))"
+    $re = "(?smi)Software project URL[\s\r\n]*\:[\s\r\n]*(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))"
     $m = Compare-Body @compareData -re $re
     if (!$m) {
         Update-StatusLabel -validationData $validationData -label ([StatusLabels]::incompleteRequest)
@@ -64,13 +71,6 @@ function Get-NewPackageValidationResult() {
     }
     else {
         $downloadUrl = $m[1]
-    }
-
-    Write-Host ([StatusCheckMessages]::checkingUserSearchedForOpenIssues)
-    $re = "\[x\]\s*There is no open issue"
-    if (!(Compare-Body @compareData -re $re)) {
-        Update-StatusLabel -validationData $validationData -label ([StatusLabels]::incompleteRequest)
-        Add-ValidationMessage -validationData $validationData -message ([ValidationMessages]::githubSearchNotMarkedError -f $validationData.repository, ($validationData.packageName -replace ' ', '%20')) -type ([MessageType]::Error)
     }
 
     try {

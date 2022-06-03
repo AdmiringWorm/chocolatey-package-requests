@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Before you open a new RFP request for pakcage please make sure of the following:
+        Before you open a new RFP request for package please make sure of the following:
 
         - Please ensure the package does not already exist in the Chocolatey Community Repository - https://community.chocolatey.org/packages - by using a relevant search.
         - Please ensure there is no existing open package requests.
@@ -31,7 +31,7 @@ body:
         - label: The title of the issue matches the identifier I want package maintainers to use
           required: false
   - type: input
-    id: softareUrl
+    id: softwareUrl
     attributes:
       label: Software project URL
       description: The home page or landing page of the software that you want to be packaged.
